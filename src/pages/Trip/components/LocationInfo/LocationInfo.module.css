@@ -1,0 +1,43 @@
+@reference 'tailwindcss';
+
+.route-item-info-container {
+    left: 25%;
+    top: 5%;
+    width: 0%;
+    height: 95%;
+    @apply absolute;
+    transition: width 250ms;
+}
+
+.route-item-info {
+    width: 90%;
+    @apply h-full border-r border-gray-200;
+}
+
+.route-item-info-header {
+    @apply w-full flex justify-end;
+}
+
+.route-item-info-close-button {
+    color: var(--ember-green-text);
+    @apply cursor-pointer mt-2 mr-2;
+}
+
+.route-item-info-content-container {
+    width: 90%;
+    @apply pl-1 m-5;
+}
+
+h3.route-item-info-title {
+    @apply font-bold text-lg mt-1;
+}
+h4.route-item-info-title {
+    color: var(--ember-green-text);
+    @apply font-bold mb-0 mt-1;
+}
+
+.arrival-departure-time {
+    color: var(--ember-green-primary);
+    @apply font-bold text-sm mt-0 mb-0;
+}
+

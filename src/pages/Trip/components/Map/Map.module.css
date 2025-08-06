@@ -1,0 +1,10 @@
+@reference 'tailwindcss';
+
+.map-container {
+    height: 80%;
+    width: 60%;
+    left: 33%;
+    border-radius: 25px;
+    margin-top: 8%;
+    transition: width 250ms, left 250ms;
+}

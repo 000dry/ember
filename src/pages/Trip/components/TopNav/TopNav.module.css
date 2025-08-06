@@ -1,0 +1,24 @@
+@reference 'tailwindcss';
+
+.top-nav {
+    height: 5%;
+    width: 100%;
+    background-color: light-dark(var(--ember-green-nav), var(--ember-green-nav));
+    @apply z-10 absolute left-0 top-0 border-gray-200;
+}
+
+.top-nav-back-button {
+    color: var(--ember-green-text);
+    @apply cursor-pointer m-1 col-span-11 self-center ml-2;
+}
+
+.top-nav-title-container {
+    display: flex;
+    @apply h-full w-full grid grid-cols-12;
+}
+
+.ember-logo {
+    width: 100px;
+    height: 20px;
+    @apply col-span-1 self-center;
+}
