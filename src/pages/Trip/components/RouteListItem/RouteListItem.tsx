@@ -4,6 +4,7 @@ import styles from './RouteListItem.module.css'
 const RouteListItem = ({ route, index, mapRef, isActive, setActiveLocation }: { route: any, index: number, mapRef: React.RefObject<mapboxgl.Map | null>, isActive: boolean, setActiveLocation: (location: string | null) => void }) => {
     const itemRef = useRef<HTMLDivElement>(null)
     const handleLocationClick = () => {
+        // activate the location chip and fly to the location, otherwise deactivate the location chip
         if(!isActive) {
             mapRef.current?.flyTo({
                 center: [route.location.lon, route.location.lat],

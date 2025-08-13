@@ -1,41 +1,54 @@
 import { useEffect, useState } from "react"
 import RouteListItem from "../RouteListItem/RouteListItem"
-import styles from './RouteOverlay.module.css'
+import styles from './RouteSidebar.module.css'
 import LocationInfo from "../LocationInfo/LocationInfo";
 import TopNav from "../TopNav/TopNav";
+import RouteProgressBar from "../RouteProgressBar/RouteProgressBar";
 
-const RouteOverlay = ({ data, mapRef }: { data: any, mapRef: React.RefObject<mapboxgl.Map | null> }) => {
+const RouteSidebar = ({ data, mapRef }: { data: any, mapRef: React.RefObject<mapboxgl.Map | null> }) => {
     const [activeLocation, setActiveLocation] = useState<string | null>(null)
     const [showRouteContent, setShowRouteContent] = useState<boolean>(false)
 
     useEffect(() => {
+        // when activeLocation state changes, debounce showing the content to allow time for the information panel to animate in
         const debouncedContent = setTimeout(() => setShowRouteContent(true), 275)
         if(activeLocation) {
-            
+            // lock the scroll on the list
             const list = document.getElementById('route-navigation-list')
             if(list) {
                 list.style.overflow = 'hidden'
             }
+
+            // shrink the width of the map and move it to the right to allow space for the info container
             const mapContainer = document.getElementById('map-container')
             if(mapContainer) {
                 mapContainer.style.left = '45%'
                 mapContainer.style.width = '50%'
             }
+
+            // reveal the info container
             const routeItemInfoContainer = document.getElementById('route-item-info-container')
             if(routeItemInfoContainer) {
                 routeItemInfoContainer.style.width = '20%'
             }
         } else {
+            // clear any waiting timeouts when activeLocation updates to null
             clearTimeout(debouncedContent)
+
+            // release the scroll on the list
             const list = document.getElementById('route-navigation-list')
             if(list) {
                 list.style.overflow = 'auto'
             }
+
+            // restore the width of the map and move it to the left to allow space for the info container
             const mapContainer = document.getElementById('map-container')
             if(mapContainer) {
                 mapContainer.style.left = '30%'
                 mapContainer.style.width = '60%'
             }
+
+            // shrink info container back out of view
             const routeItemInfoContainer = document.getElementById('route-item-info-container')
             if(routeItemInfoContainer) {
                 routeItemInfoContainer.style.width = '0%'
@@ -56,6 +69,7 @@ const RouteOverlay = ({ data, mapRef }: { data: any, mapRef: React.RefObject<map
         }
         
         const handleScrollEnd = () => {
+            // on scroll end, find the location that is at the top of the list and fly to it
             listItems.forEach((item: any, index: number) => {
                 const listItemYCoord = item.getBoundingClientRect().y
                 if(listItemYCoord === containerYCoord) {
@@ -69,6 +83,7 @@ const RouteOverlay = ({ data, mapRef }: { data: any, mapRef: React.RefObject<map
         }
 
         const handleScroll = () => {
+            // on scroll, update the progress of the visual representation of the journey progress that is to the left of the list
             const scrollPercentage = (list?.scrollTop ?? 0) / ((list?.scrollHeight ?? 0 )- (ghostItem?.offsetHeight ?? 0) - lastItemHeight - 20) * 100
             const progressBar = document.getElementById('route-progress-bar-filled') as HTMLElement
 
@@ -80,6 +95,7 @@ const RouteOverlay = ({ data, mapRef }: { data: any, mapRef: React.RefObject<map
         list?.addEventListener('scrollend', handleScrollEnd)
         list?.addEventListener('scroll', handleScroll)
 
+        // remove the event listeners when the component unmounts
         return () => {
             list?.removeEventListener('scrollend', handleScrollEnd)
             list?.removeEventListener('scroll', handleScroll)
@@ -93,15 +109,7 @@ const RouteOverlay = ({ data, mapRef }: { data: any, mapRef: React.RefObject<map
         <TopNav />
         <div className={styles['route-info-container']}>
             <div className={styles['route-info-container-grid']}>
-                <div className={styles['route-progress-bar-container']}>
-                    <span className={styles['start-end-location']}>{data.route[0].location.region_name}</span>
-                    <div className={styles['route-progress-bar']}>
-                        <div id="route-progress-bar-empty" className={styles['route-progress-bar-empty']}>
-                            <div id="route-progress-bar-filled" className={styles['route-progress-bar-filled']} />
-                        </div>
-                    </div>
-                    <span className={styles['start-end-location']}>{data.route[data.route.length - 1].location.region_name}</span>
-                </div>
+                <RouteProgressBar data={data} />
                 <div id="route-navigation-list" className={styles['route-navigation-list']}>
                     <ol>
                         {[...data.route.map((route: any, index: number) => (<RouteListItem route={route} key={route.location.id} index={index} mapRef={mapRef} isActive={activeLocation === route.location.id} setActiveLocation={setActiveLocation}/>)),
@@ -116,4 +124,4 @@ const RouteOverlay = ({ data, mapRef }: { data: any, mapRef: React.RefObject<map
     )
 }
 
-export default RouteOverlay
+export default RouteSidebar

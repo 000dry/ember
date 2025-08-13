@@ -1,0 +1,26 @@
+@reference 'tailwindcss';
+
+.route-progress-bar-container {
+    width: 100%;
+    @apply col-span-2 text-center;
+}
+
+.start-end-location {
+    @apply font-bold text-sm;
+}
+
+.route-progress-bar {
+    height: 100%;
+    width: 50%;
+    @apply col-span-2;
+}
+
+.route-progress-bar-empty {
+    height: 100%;
+    border-right: 6px solid var(--ember-green-tertiary);
+}
+
+.route-progress-bar-filled {
+    height: 0%;
+    border-right: 6px solid var(--ember-green-primary);
+}

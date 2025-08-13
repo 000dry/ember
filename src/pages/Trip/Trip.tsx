@@ -3,7 +3,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import Map from './components/Map/Map'
 import { useParams } from "react-router";
 import { useTrip } from '../../hooks';
-import RouteOverlay from './components/RouteOverlay/RouteOverlay';
+import RouteSidebar from './components/RouteSidebar/RouteSidebar';
 import { useEffect, useRef, useState } from 'react';
 import Marker from './components/Marker/Marker';
 import mapboxgl from 'mapbox-gl';
@@ -52,7 +52,7 @@ const Trip = () => {
       {<Map mapContainerRef={mapContainerRef} position={position} setPosition={setPosition} />}
       {mapRef.current && data && data.route.map((route: any) => {
         return <Marker route={route} mapRef={mapRef.current} />})}
-      {!isLoading && data && <RouteOverlay data={data} mapRef={mapRef}/>}
+      {!isLoading && data && <RouteSidebar data={data} mapRef={mapRef}/>}
     </>
   )
 }
